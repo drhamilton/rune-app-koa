@@ -1,4 +1,4 @@
-var render = require('./lib/render');
+// var render = require('./lib/render');
 
 var fs = require('fs');
 var parse = require('co-body');
@@ -48,9 +48,13 @@ app.post('/post-test', function *(next) {
   this.body = data;
 });
 
-// app.get('/robo', function *(next) {
+
+// function *init() {
 //   this.body = yield render('app');
-// });
+// }
+// app.use(route.get('/', init));
+
+
 
 var port = process.env.PORT || 3000;
 app.listen(port);
