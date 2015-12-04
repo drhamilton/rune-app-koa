@@ -48,13 +48,9 @@ app.post('/post-test', function *(next) {
   this.body = data;
 });
 
-
-function *init() {
+app.get('/robo', function *(next) {
   this.body = yield render('app');
-}
-app.get('/robo', init);
-
-
+});
 
 var port = process.env.PORT || 3000;
 app.listen(port);
