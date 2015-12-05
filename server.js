@@ -1,5 +1,3 @@
-// var render = require('./lib/render');
-
 var fs = require('fs');
 var parse = require('co-body');
 var logger = require('koa-logger');
@@ -33,6 +31,14 @@ app.get('/get-test', function *(next) {
   this.body = data;
 });
 
+app.get('/api', function *(next) {
+    app.get('http://localhost:3000', function *(next) {
+        return 'testing';
+    });
+
+    this.body = data;
+})
+
 /**
  * Simple test for POST request
  */
@@ -47,14 +53,6 @@ app.post('/post-test', function *(next) {
 
   this.body = data;
 });
-
-
-// function *init() {
-//   this.body = yield render('app');
-// }
-// app.use(route.get('/', init));
-
-
 
 var port = process.env.PORT || 3000;
 app.listen(port);
