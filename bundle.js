@@ -64,6 +64,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var $ref = falcor.Model.ref;
+
 	var model = new falcor.Model({
 	    cache: {
 	        ingredientsById: {
@@ -79,20 +81,11 @@
 	        recipes: [{
 	            name: "cookies",
 	            instructions: "bakem",
-	            ingredients: [{
-	                $type: "ref",
-	                value: "ingredientsById[1]"
-	            }, {
-	                $type: "ref",
-	                value: "ingredientsById[2]"
-	            }]
+	            ingredients: [$ref("ingredientsById[1]"), $ref("ingredientsById[2]")]
 	        }, {
 	            name: "brownies",
 	            instructions: "dsfdsfa",
-	            ingredients: [{
-	                $type: "ref",
-	                value: "ingredientsById[1]"
-	            }]
+	            ingredients: [$ref("ingredientsById[1]")]
 	        }]
 	    }
 	});
@@ -105,7 +98,7 @@
 	    instructions: "dsfdsfa"
 	}];
 
-	model.get('recipes[0..1].ingredients[0..9]').then(function (data) {
+	model.get('recipes[0..1].ingredients[0..9]["name", "description"]').then(function (data) {
 	    console.log(data);
 	});
 
@@ -122,14 +115,137 @@
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'h1',
+	                'div',
 	                null,
-	                'Works!'
+	                _react2.default.createElement(RecipeList, { recipes: [{
+	                        name: "Brownies",
+	                        instructions: "bake",
+	                        ingredients: ['flour', 'choc']
+	                    }] })
 	            );
 	        }
 	    }]);
 
 	    return App;
+	})(_react2.default.Component);
+
+	var RecipeList = (function (_React$Component2) {
+	    _inherits(RecipeList, _React$Component2);
+
+	    function RecipeList() {
+	        _classCallCheck(this, RecipeList);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(RecipeList).apply(this, arguments));
+	    }
+
+	    _createClass(RecipeList, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                this.props.recipes.map(function (recipe) {
+	                    return _react2.default.createElement(Recipe, recipe);
+	                })
+	            );
+	        }
+	    }]);
+
+	    return RecipeList;
+	})(_react2.default.Component);
+
+	var Recipe = (function (_React$Component3) {
+	    _inherits(Recipe, _React$Component3);
+
+	    function Recipe() {
+	        _classCallCheck(this, Recipe);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Recipe).apply(this, arguments));
+	    }
+
+	    _createClass(Recipe, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(Name, { name: this.props.name }),
+	                _react2.default.createElement(Instructions, { instructions: this.props.instructions }),
+	                _react2.default.createElement(Ingredients, { ingredients: this.props.ingredients })
+	            );
+	        }
+	    }]);
+
+	    return Recipe;
+	})(_react2.default.Component);
+
+	var Name = (function (_React$Component4) {
+	    _inherits(Name, _React$Component4);
+
+	    function Name() {
+	        _classCallCheck(this, Name);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Name).apply(this, arguments));
+	    }
+
+	    _createClass(Name, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'h1',
+	                null,
+	                this.props.name
+	            );
+	        }
+	    }]);
+
+	    return Name;
+	})(_react2.default.Component);
+
+	var Instructions = (function (_React$Component5) {
+	    _inherits(Instructions, _React$Component5);
+
+	    function Instructions() {
+	        _classCallCheck(this, Instructions);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Instructions).apply(this, arguments));
+	    }
+
+	    _createClass(Instructions, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'h1',
+	                null,
+	                this.props.instructions
+	            );
+	        }
+	    }]);
+
+	    return Instructions;
+	})(_react2.default.Component);
+
+	var Ingredients = (function (_React$Component6) {
+	    _inherits(Ingredients, _React$Component6);
+
+	    function Ingredients() {
+	        _classCallCheck(this, Ingredients);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Ingredients).apply(this, arguments));
+	    }
+
+	    _createClass(Ingredients, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'h1',
+	                null,
+	                JSON.stringify(this.props.ingredients)
+	            );
+	        }
+	    }]);
+
+	    return Ingredients;
 	})(_react2.default.Component);
 
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('target'));

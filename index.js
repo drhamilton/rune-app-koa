@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+const $ref = falcor.Model.ref;
 
 const model = new falcor.Model({
     cache: {
@@ -18,24 +19,15 @@ const model = new falcor.Model({
                 name: "cookies",
                 instructions: "bakem",
                 ingredients: [
-                    {
-                        $type:"ref",
-                        value:"ingredientsById[1]"
-                    },
-                    {
-                        $type:"ref",
-                        value:"ingredientsById[2]"
-                    }
+                    $ref("ingredientsById[1]"),
+                    $ref("ingredientsById[2]")
                 ]
             },
             {
                 name: "brownies",
                 instructions: "dsfdsfa",
                 ingredients: [
-                    {
-                        $type:"ref",
-                        value:"ingredientsById[1]"
-                    }
+                    $ref("ingredientsById[1]")
                 ]
             }
         ]
@@ -53,7 +45,7 @@ const model2 = [
     }
 ];
 
-model.get('recipes[0..1].ingredients[0..9]')
+model.get('recipes[0..1].ingredients[0..9]["name", "description"]')
     .then(data => {
         console.log(data);
     });
@@ -61,8 +53,68 @@ model.get('recipes[0..1].ingredients[0..9]')
 class App extends React.Component {
     render() {
         return (
-            <h1>Works!</h1>
+            <div>
+                <RecipeList recipes={
+                    [
+                        {
+                            name:"Brownies",
+                            instructions:"bake",
+                            ingredients:['flour','choc']
+                        }
+                    ]
+                } />
+            </div>
         );
+    }
+}
+
+class RecipeList extends React.Component {
+    render() {
+        return (
+            <div>
+                {this.props.recipes.map( recipe => {
+                    return (
+                        <Recipe {...recipe}/>
+                    )
+                })}
+            </div>
+        );
+    }
+}
+
+class Recipe extends React.Component {
+    render() {
+        return (
+            <div>
+                <Name name={this.props.name} />
+                <Instructions instructions={this.props.instructions} />
+                <Ingredients ingredients={this.props.ingredients} />
+            </div>
+        );
+    }
+}
+
+class Name extends React.Component {
+    render() {
+        return (
+            <h1>{this.props.name}</h1>
+        )
+    }
+}
+
+class Instructions extends React.Component {
+    render() {
+        return (
+            <h1>{this.props.instructions}</h1>
+        )
+    }
+}
+
+class Ingredients extends React.Component {
+    render() {
+        return (
+            <h1>{JSON.stringify(this.props.ingredients)}</h1>
+        )
     }
 }
 
