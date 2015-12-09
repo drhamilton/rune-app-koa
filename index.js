@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+const _ = require('lodash');
 const $ref = falcor.Model.ref;
 
 const model = new falcor.Model({
@@ -14,7 +15,7 @@ const model = new falcor.Model({
                 description: 'good'
             }
         },
-        recipes: [
+        recipies: [
             {
                 name: "cookies",
                 instructions: "bakem",
@@ -34,55 +35,75 @@ const model = new falcor.Model({
     }
 });
 
-const model2 = [
-    {
-        name: "cookies",
-        instructions: "bakem"
-    },
-    {
-        name: "brownies",
-        instructions: "dsfdsfa"
-    }
-];
-
-model.get('recipes[0..1].ingredients[0..9]["name", "description"]')
-    .then(data => {
-        console.log(data);
-    });
+// model.get('recipes[0..1].ingredients[0..9]["name", "description"]')
+//     .then(data => {
+//         console.log(data);
+//     });
 
 class App extends React.Component {
     render() {
         return (
             <div>
-                <RecipeList recipes={
-                    [
-                        {
-                            name:"Brownies",
-                            instructions:"bake",
-                            ingredients:['flour','choc']
-                        }
-                    ]
-                } />
+                <RecipeList />
             </div>
         );
     }
 }
 
-class RecipeList extends React.Component {
+const RecipeList = React.createClass({
+    getInitialState() {
+        return {
+            recipies: []
+        };
+    },
+    componentWillMount() {
+        model.get(
+            [
+                "recipies",
+                { from: 0, to: 9 },
+                Recipe.queries.recipe()
+            ],
+            [
+                "recipies",
+                { from: 0, to: 9 },
+                "ingredients",
+                { from: 0, to: 9 },
+                Ingredients.queries.ingredients()
+            ]
+        ).then(data => {
+            this.setState({
+                recipies: _.values(data.json.recipies)
+            });
+            console.log(this.state.recipies);
+        });
+    },
     render() {
         return (
             <div>
-                {this.props.recipes.map( recipe => {
+                {this.state.recipies.map( recipe => {
                     return (
-                        <Recipe {...recipe}/>
+                        <Recipe {...recipe} />
                     )
                 })}
             </div>
         );
     }
-}
+});
 
-class Recipe extends React.Component {
+const Recipe = React.createClass ({
+    statics: {
+        queries: {
+            recipe() {
+                return _.union(
+                    Name.queries.recipe(),
+                    Instructions.queries.recipe()
+                );
+            },
+            ingredients() {
+                return Ingredients.queries.recipe();
+            }
+        }
+    },
     render() {
         return (
             <div>
@@ -92,30 +113,51 @@ class Recipe extends React.Component {
             </div>
         );
     }
-}
+});
 
-class Name extends React.Component {
+const Name = React.createClass({
+    statics: {
+        queries: {
+            recipe() {
+                return ['name']
+            }
+        }
+    },
     render() {
         return (
             <h1>{this.props.name}</h1>
         )
     }
-}
+});
 
-class Instructions extends React.Component {
+const Instructions = React.createClass({
+    statics: {
+        queries: {
+            recipe() {
+                return ['instructions']
+            }
+        }
+    },
     render() {
         return (
             <h1>{this.props.instructions}</h1>
         )
     }
-}
+});
 
-class Ingredients extends React.Component {
+const Ingredients = React.createClass({
+    statics: {
+        queries: {
+            ingredients() {
+                return ['name', 'description'];
+            }
+        }
+    },
     render() {
         return (
             <h1>{JSON.stringify(this.props.ingredients)}</h1>
         )
     }
-}
+});
 
 ReactDOM.render( <App/>, document.getElementById('target'));
