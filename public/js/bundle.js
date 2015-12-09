@@ -102,12 +102,8 @@
 	        var _this2 = this;
 
 	        _superagent2.default.get('/api').end(function (err, res) {
-	            console.log('error', err);
-	            console.log('res', res);
-
-	            var data = JSON.parse(res.text);
-
-	            _this2.setState({ greeting: data.greeting });
+	            console.log(res);
+	            _this2.setState({ greeting: res.body.id });
 	        });
 	    },
 	    render: function render() {

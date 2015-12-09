@@ -22,12 +22,8 @@ const RecipeList = React.createClass({
         request
             .get('/api')
             .end((err, res) => {
-                console.log('error', err);
-                console.log('res', res);
-
-                var data = JSON.parse(res.text);
-
-                this.setState({ greeting: data.greeting });
+                console.log(res)
+                this.setState({ greeting: res.body.id });
             })
     },
     render() {
