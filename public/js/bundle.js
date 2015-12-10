@@ -104,7 +104,9 @@
 	        var _this2 = this;
 
 	        _superagent2.default.get('/api/' + username).end(function (err, res) {
-	            _this2.setState({ id: res.body.id });
+	            _this2.setState({
+	                id: res.body.id
+	            });
 	        });
 	    },
 	    handleSubmit: function handleSubmit(e) {
@@ -113,7 +115,9 @@
 	        this.getSummonerId(this.state.username);
 	    },
 	    handleUsernameChange: function handleUsernameChange(e) {
-	        this.setState({ username: e.target.value });
+	        this.setState({
+	            username: e.target.value
+	        });
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(

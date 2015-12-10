@@ -26,7 +26,9 @@ const Container = React.createClass({
         request
             .get(`/api/${username}`)
             .end((err, res) => {
-                this.setState({ id: res.body.id });
+                this.setState({
+                    id: res.body.id
+                });
             })
     },
     handleSubmit(e) {
@@ -35,7 +37,9 @@ const Container = React.createClass({
         this.getSummonerId(this.state.username);
     },
     handleUsernameChange(e) {
-        this.setState({username: e.target.value});
+        this.setState({
+            username: e.target.value
+        });
     },
     render() {
         return (
