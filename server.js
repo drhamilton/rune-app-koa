@@ -4,11 +4,16 @@ var request = require('superagent');
 
 app.use(express.static('public'));
 
-app.get('/api', function (req, res) {
-    var url = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/';
-    var username = 'RiotSchmick';
+app.get('/api/:username', function (req, res) {
+    var username = req.params.username;
+
+    var domain = 'https://na.api.pvp.net/api/lol/na/v1.4';
+
+    var summonerNameRoute = '/summoner/by-name/';
+    var runeRoute = '/summoner/{summonerIds}/runes'
+
     var key = 'df0f2c4b-4e06-40c4-86c8-1731f1dd2d60';
-    var api = url + username + '?api_key=' + key;
+    var api = domain + summonerNameRoute + username + '?api_key=' + key;
 
     request
         .get(api)

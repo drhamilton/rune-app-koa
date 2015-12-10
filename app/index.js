@@ -6,30 +6,49 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <RecipeList />
+                <Container />
             </div>
         );
     }
 }
 
-const RecipeList = React.createClass({
+const Container = React.createClass({
     getInitialState() {
         return {
-            greeting: 'Sup'
+            id: '',
+            username: ''
         };
     },
     componentWillMount() {
+
+    },
+    getSummonerId(username) {
         request
-            .get('/api')
+            .get(`/api/${username}`)
             .end((err, res) => {
-                console.log(res)
-                this.setState({ greeting: res.body.id });
+                this.setState({ id: res.body.id });
             })
+    },
+    handleSubmit(e) {
+        e.preventDefault();
+
+        this.getSummonerId(this.state.username);
+    },
+    handleUsernameChange(e) {
+        this.setState({username: e.target.value});
     },
     render() {
         return (
             <div>
-                {this.state.greeting}
+                <h1>Your summoner id is: {this.state.id}</h1>
+                <form onSubmit={this.handleSubmit}>
+                    <input
+                        type="text"
+                        value={this.state.username}
+                        onChange={this.handleUsernameChange}
+                    />
+                    <input type="submit" value="Submit"></input>
+                </form>
             </div>
         );
     }

@@ -83,7 +83,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(RecipeList, null)
+	                _react2.default.createElement(Container, null)
 	            );
 	        }
 	    }]);
@@ -91,26 +91,50 @@
 	    return App;
 	})(_react2.default.Component);
 
-	var RecipeList = _react2.default.createClass({
-	    displayName: 'RecipeList',
+	var Container = _react2.default.createClass({
+	    displayName: 'Container',
 	    getInitialState: function getInitialState() {
 	        return {
-	            greeting: 'Sup'
+	            id: '',
+	            username: ''
 	        };
 	    },
-	    componentWillMount: function componentWillMount() {
+	    componentWillMount: function componentWillMount() {},
+	    getSummonerId: function getSummonerId(username) {
 	        var _this2 = this;
 
-	        _superagent2.default.get('/api').end(function (err, res) {
-	            console.log(res);
-	            _this2.setState({ greeting: res.body.id });
+	        _superagent2.default.get('/api/' + username).end(function (err, res) {
+	            _this2.setState({ id: res.body.id });
 	        });
+	    },
+	    handleSubmit: function handleSubmit(e) {
+	        e.preventDefault();
+
+	        this.getSummonerId(this.state.username);
+	    },
+	    handleUsernameChange: function handleUsernameChange(e) {
+	        this.setState({ username: e.target.value });
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
 	            null,
-	            this.state.greeting
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Your summoner id is: ',
+	                this.state.id
+	            ),
+	            _react2.default.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit },
+	                _react2.default.createElement('input', {
+	                    type: 'text',
+	                    value: this.state.username,
+	                    onChange: this.handleUsernameChange
+	                }),
+	                _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
+	            )
 	        );
 	    }
 	});
