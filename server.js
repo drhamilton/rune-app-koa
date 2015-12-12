@@ -1,31 +1,55 @@
 var express = require('express');
 var app = express();
 var request = require('superagent');
+var axios = require('axios');
+var Q = require('q');
 
 app.use(express.static('public'));
 
+var domain = 'https://na.api.pvp.net/api/lol/na/v1.4';
+var key = 'df0f2c4b-4e06-40c4-86c8-1731f1dd2d60';
+
+function getRuneRoute(id){
+    return domain +  `/summoner/${id}/runes` + '?api_key=' + key;
+}
+
+function getSummonerRoute(username){
+    return domain + '/summoner/by-name/' + username + '?api_key=' + key;
+}
+
 app.get('/api/:username', function (req, res) {
     var username = req.params.username;
+    var summonerEndpoint = getSummonerRoute(username);
 
-    var domain = 'https://na.api.pvp.net/api/lol/na/v1.4';
+    var getRunes = function(id){
+        return axios
+                .get(getRuneRoute(id))
+                .then(function(res){
+                    return res;
+                });
+    }
 
-    var summonerNameRoute = '/summoner/by-name/';
-    var runeRoute = '/summoner/{summonerIds}/runes'
-
-    var key = 'df0f2c4b-4e06-40c4-86c8-1731f1dd2d60';
-    var api = domain + summonerNameRoute + username + '?api_key=' + key;
-
-    request
-        .get(api)
-        .end(function(err, resp){
-            var name = Object.keys(resp.body)[0];
-            var id = resp.body[name].id
+    axios
+        .get(summonerEndpoint)
+        .then(function(res){
+            var name = Object.keys(res.data)[0];
+            var id = res.data[name].id
 
             var data = {
                 id: id
             };
 
-            res.send(data);
+            return data;
+        })
+        .then(function(res) {
+            return getRunes(res.id);
+        })
+        .then(function(res){
+            console.log('runes are', res.data);
+        })
+        .catch(function(res){
+            console.log('errored');
+            console.error('res', res)
         });
 });
 
