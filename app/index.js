@@ -16,7 +16,8 @@ const Container = React.createClass({
     getInitialState() {
         return {
             id: '',
-            username: ''
+            username: '',
+            runes: []
         };
     },
     componentWillMount() {
@@ -26,8 +27,10 @@ const Container = React.createClass({
         request
             .get(`/api/${username}`)
             .end((err, res) => {
+                let id = Object.keys(res.body);
                 this.setState({
-                    id: res.body.id
+                    id: id,
+                    runes: res.body[id].pages
                 });
             })
     },
@@ -48,14 +51,31 @@ const Container = React.createClass({
                 <form onSubmit={this.handleSubmit}>
                     <input
                         type="text"
-                        value={this.state.username}
+                        value={this.state.usesrname}
                         onChange={this.handleUsernameChange}
                     />
                     <input type="submit" value="Submit"></input>
                 </form>
+                <RunePageList runes={this.state.runes}/>
             </div>
         );
     }
 });
+
+class RunePageList extends React.Component {
+    render() {
+        let runes = this.props.runes;
+
+        console.log()
+
+        return (
+            <ul>
+                {runes.map((el) => {
+                    return <li>{el.name}</li>
+                })}
+            </ul>
+        )
+    }
+}
 
 ReactDOM.render( <App/>, document.getElementById('target'));

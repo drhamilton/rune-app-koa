@@ -44,8 +44,8 @@ app.get('/api/:username', function (req, res) {
         .then(function(res) {
             return getRunes(res.id);
         })
-        .then(function(res){
-            console.log('runes are', res.data);
+        .then(function(result){
+            res.send(result.data)
         })
         .catch(function(res){
             console.log('errored');

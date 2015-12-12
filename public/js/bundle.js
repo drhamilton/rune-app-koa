@@ -96,7 +96,8 @@
 	    getInitialState: function getInitialState() {
 	        return {
 	            id: '',
-	            username: ''
+	            username: '',
+	            runes: []
 	        };
 	    },
 	    componentWillMount: function componentWillMount() {},
@@ -104,8 +105,10 @@
 	        var _this2 = this;
 
 	        _superagent2.default.get('/api/' + username).end(function (err, res) {
+	            var id = Object.keys(res.body);
 	            _this2.setState({
-	                id: res.body.id
+	                id: id,
+	                runes: res.body[id].pages
 	            });
 	        });
 	    },
@@ -134,14 +137,48 @@
 	                { onSubmit: this.handleSubmit },
 	                _react2.default.createElement('input', {
 	                    type: 'text',
-	                    value: this.state.username,
+	                    value: this.state.usesrname,
 	                    onChange: this.handleUsernameChange
 	                }),
 	                _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
-	            )
+	            ),
+	            _react2.default.createElement(RunePageList, { runes: this.state.runes })
 	        );
 	    }
 	});
+
+	var RunePageList = (function (_React$Component2) {
+	    _inherits(RunePageList, _React$Component2);
+
+	    function RunePageList() {
+	        _classCallCheck(this, RunePageList);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(RunePageList).apply(this, arguments));
+	    }
+
+	    _createClass(RunePageList, [{
+	        key: 'render',
+	        value: function render() {
+	            var runes = this.props.runes;
+
+	            console.log();
+
+	            return _react2.default.createElement(
+	                'ul',
+	                null,
+	                runes.map(function (el) {
+	                    return _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        el.name
+	                    );
+	                })
+	            );
+	        }
+	    }]);
+
+	    return RunePageList;
+	})(_react2.default.Component);
 
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('target'));
 
