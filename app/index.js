@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
+import runeData from '../rune-info';
 
 class App extends React.Component {
     render() {
+        console.log(runeData);
         return (
             <div>
                 <Container />
@@ -66,16 +68,34 @@ class RunePageList extends React.Component {
     render() {
         let runes = this.props.runes;
 
-        console.log()
-
         return (
             <ul>
                 {runes.map((el) => {
-                    return <li>{el.name}</li>
+                    return <RunePage rune={el} />
                 })}
             </ul>
         )
     }
 }
 
-ReactDOM.render( <App/>, document.getElementById('target'));
+class RunePage extends React.Component {
+    render() {
+        let rune = this.props.rune;
+        return (
+            <li>
+                <div>
+                    <h1>{rune.name}</h1>
+                    <ul>
+                        {rune.slots.map((el) => {
+                            return (
+                                <li>{runeData[el.runeId].description}</li>
+                            )
+                        })}
+                    </ul>
+                </div>
+            </li>
+        );
+    }
+}
+
+ReactDOM.render(<App/>, document.getElementById('target'));

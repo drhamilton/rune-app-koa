@@ -3,6 +3,7 @@ var app = express();
 var request = require('superagent');
 var axios = require('axios');
 var Q = require('q');
+var fs = require('fs');
 
 app.use(express.static('public'));
 
@@ -16,6 +17,18 @@ function getRuneRoute(id){
 function getSummonerRoute(username){
     return domain + '/summoner/by-name/' + username + '?api_key=' + key;
 }
+
+//get rune data
+app.get('/runes', function(req, res) {
+    axios.
+        get('https://global.api.pvp.net/api/lol/static-data/na/v1.2/rune?api_key=df0f2c4b-4e06-40c4-86c8-1731f1dd2d60')
+        .then(function(res){
+            var data = JSON.stringify(res.data.data, null, 2);
+            fs.writeFile('runes.json', data, function (err) {
+                if (err) throw err;
+            });
+        })
+});
 
 app.get('/api/:username', function (req, res) {
     var username = req.params.username;
