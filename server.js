@@ -4,6 +4,7 @@ var request = require('superagent');
 var axios = require('axios');
 var Q = require('q');
 var fs = require('fs');
+var test = 'test';
 
 app.use(express.static('public'));
 
