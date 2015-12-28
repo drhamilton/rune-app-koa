@@ -4,7 +4,6 @@ var request = require('superagent');
 var axios = require('axios');
 var Q = require('q');
 var fs = require('fs');
-var test = 'test';
 
 app.use(express.static('public'));
 
@@ -17,6 +16,13 @@ function getRuneRoute(id){
 
 function getSummonerRoute(username){
     return domain + '/summoner/by-name/' + username + '?api_key=' + key;
+}
+
+function getRunes(id) {
+  return axios.get(getRuneRoute(id))
+              .then(function(res){
+                return res;
+              });
 }
 
 //get rune data
@@ -35,17 +41,10 @@ app.get('/api/:username', function (req, res) {
     var username = req.params.username;
     var summonerEndpoint = getSummonerRoute(username);
 
-    var getRunes = function(id){
-        return axios
-                .get(getRuneRoute(id))
-                .then(function(res){
-                    return res;
-                });
-    }
+    console.log('getting', req.params.username);
 
-    axios
-        .get(summonerEndpoint)
-        .then(function(res){
+    axios.get(summonerEndpoint)
+          .then(function(res){
             var name = Object.keys(res.data)[0];
             var id = res.data[name].id
 
@@ -54,17 +53,17 @@ app.get('/api/:username', function (req, res) {
             };
 
             return data;
-        })
-        .then(function(res) {
+          })
+          .then(function(res) {
             return getRunes(res.id);
-        })
-        .then(function(result){
+          })
+          .then(function(result){
             res.send(result.data)
-        })
-        .catch(function(res){
+          })
+          .catch(function(res){
             console.log('errored');
             console.error('res', res)
-        });
+          });
 });
 
 app.set('port', (process.env.PORT || 5000));

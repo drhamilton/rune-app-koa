@@ -56,13 +56,9 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _superagent = __webpack_require__(159);
+	var _Container = __webpack_require__(159);
 
-	var _superagent2 = _interopRequireDefault(_superagent);
-
-	var _runeInfo = __webpack_require__(162);
-
-	var _runeInfo2 = _interopRequireDefault(_runeInfo);
+	var _Container2 = _interopRequireDefault(_Container);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84,142 +80,15 @@
 	    _createClass(App, [{
 	        key: 'render',
 	        value: function render() {
-	            console.log(_runeInfo2.default);
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(Container, null)
+	                _react2.default.createElement(_Container2.default, null)
 	            );
 	        }
 	    }]);
 
 	    return App;
-	})(_react2.default.Component);
-
-	var Container = _react2.default.createClass({
-	    displayName: 'Container',
-	    getInitialState: function getInitialState() {
-	        return {
-	            id: '',
-	            username: '',
-	            runes: []
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {},
-	    getSummonerId: function getSummonerId(username) {
-	        var _this2 = this;
-
-	        _superagent2.default.get('/api/' + username).end(function (err, res) {
-	            var id = Object.keys(res.body);
-	            _this2.setState({
-	                id: id,
-	                runes: res.body[id].pages
-	            });
-	        });
-	    },
-	    handleSubmit: function handleSubmit(e) {
-	        e.preventDefault();
-
-	        this.getSummonerId(this.state.username);
-	    },
-	    handleUsernameChange: function handleUsernameChange(e) {
-	        this.setState({
-	            username: e.target.value
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(
-	                'h1',
-	                null,
-	                'Your summoner id is: ',
-	                this.state.id
-	            ),
-	            _react2.default.createElement(
-	                'form',
-	                { onSubmit: this.handleSubmit },
-	                _react2.default.createElement('input', {
-	                    type: 'text',
-	                    value: this.state.usesrname,
-	                    onChange: this.handleUsernameChange
-	                }),
-	                _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
-	            ),
-	            _react2.default.createElement(RunePageList, { runes: this.state.runes })
-	        );
-	    }
-	});
-
-	var RunePageList = (function (_React$Component2) {
-	    _inherits(RunePageList, _React$Component2);
-
-	    function RunePageList() {
-	        _classCallCheck(this, RunePageList);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(RunePageList).apply(this, arguments));
-	    }
-
-	    _createClass(RunePageList, [{
-	        key: 'render',
-	        value: function render() {
-	            var runes = this.props.runes;
-
-	            return _react2.default.createElement(
-	                'ul',
-	                null,
-	                runes.map(function (el) {
-	                    return _react2.default.createElement(RunePage, { rune: el });
-	                })
-	            );
-	        }
-	    }]);
-
-	    return RunePageList;
-	})(_react2.default.Component);
-
-	var RunePage = (function (_React$Component3) {
-	    _inherits(RunePage, _React$Component3);
-
-	    function RunePage() {
-	        _classCallCheck(this, RunePage);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(RunePage).apply(this, arguments));
-	    }
-
-	    _createClass(RunePage, [{
-	        key: 'render',
-	        value: function render() {
-	            var rune = this.props.rune;
-	            return _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement(
-	                        'h1',
-	                        null,
-	                        rune.name
-	                    ),
-	                    _react2.default.createElement(
-	                        'ul',
-	                        null,
-	                        rune.slots.map(function (el) {
-	                            return _react2.default.createElement(
-	                                'li',
-	                                null,
-	                                _runeInfo2.default[el.runeId].description
-	                            );
-	                        })
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return RunePage;
 	})(_react2.default.Component);
 
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('target'));
@@ -19815,12 +19684,127 @@
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _superagent = __webpack_require__(160);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _RunePageList = __webpack_require__(163);
+
+	var _RunePageList2 = _interopRequireDefault(_RunePageList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Container = (function (_React$Component) {
+	    _inherits(Container, _React$Component);
+
+	    function Container(props) {
+	        _classCallCheck(this, Container);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, props));
+
+	        _this.state = {
+	            id: '',
+	            username: '',
+	            runes: []
+	        };
+
+	        _this.getSummonerId = _this.getSummonerId.bind(_this);
+	        _this.handleSubmit = _this.handleSubmit.bind(_this);
+	        _this.handleUsernameChange = _this.handleUsernameChange.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(Container, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {}
+	    }, {
+	        key: 'getSummonerId',
+	        value: function getSummonerId(username) {
+	            var _this2 = this;
+
+	            return _superagent2.default.get('/api/' + username).end(function (err, res) {
+	                if (err) return err;
+	                var id = Object.keys(res.body);
+	                _this2.setState({
+	                    id: id,
+	                    runes: res.body[id].pages
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'handleSubmit',
+	        value: function handleSubmit(e) {
+	            e.preventDefault();
+
+	            this.getSummonerId(this.state.username);
+	        }
+	    }, {
+	        key: 'handleUsernameChange',
+	        value: function handleUsernameChange(e) {
+	            this.setState({
+	                username: e.target.value
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Your summoner id is: ',
+	                    this.state.id
+	                ),
+	                _react2.default.createElement(
+	                    'form',
+	                    { onSubmit: this.handleSubmit },
+	                    _react2.default.createElement('input', {
+	                        type: 'text',
+	                        value: this.state.usesrname,
+	                        onChange: this.handleUsernameChange
+	                    }),
+	                    _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
+	                ),
+	                _react2.default.createElement(_RunePageList2.default, { runes: this.state.runes })
+	            );
+	        }
+	    }]);
+
+	    return Container;
+	})(_react2.default.Component);
+
+	exports.default = Container;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/**
 	 * Module dependencies.
 	 */
 
-	var Emitter = __webpack_require__(160);
-	var reduce = __webpack_require__(161);
+	var Emitter = __webpack_require__(161);
+	var reduce = __webpack_require__(162);
 
 	/**
 	 * Root reference for iframes.
@@ -20999,7 +20983,7 @@
 
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports) {
 
 	
@@ -21169,7 +21153,7 @@
 
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports) {
 
 	
@@ -21198,7 +21182,141 @@
 	};
 
 /***/ },
-/* 162 */
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _RunePage = __webpack_require__(164);
+
+	var _RunePage2 = _interopRequireDefault(_RunePage);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RunePageList = (function (_React$Component) {
+	    _inherits(RunePageList, _React$Component);
+
+	    function RunePageList() {
+	        _classCallCheck(this, RunePageList);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(RunePageList).apply(this, arguments));
+	    }
+
+	    _createClass(RunePageList, [{
+	        key: 'render',
+	        value: function render() {
+	            var runes = this.props.runes;
+
+	            return _react2.default.createElement(
+	                'ul',
+	                null,
+	                runes.map(function (el) {
+	                    return _react2.default.createElement(_RunePage2.default, { rune: el });
+	                })
+	            );
+	        }
+	    }]);
+
+	    return RunePageList;
+	})(_react2.default.Component);
+
+	exports.default = RunePageList;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _runeInfo = __webpack_require__(165);
+
+	var _runeInfo2 = _interopRequireDefault(_runeInfo);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RunePage = (function (_React$Component) {
+	  _inherits(RunePage, _React$Component);
+
+	  function RunePage() {
+	    _classCallCheck(this, RunePage);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(RunePage).apply(this, arguments));
+	  }
+
+	  _createClass(RunePage, [{
+	    key: 'render',
+	    value: function render() {
+	      var rune = this.props.rune;
+
+	      if (typeof rune.slots === 'undefined') {
+	        rune.slots = [];
+	      }
+	      return _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            rune.name
+	          ),
+	          _react2.default.createElement(
+	            'ul',
+	            null,
+	            rune.slots.map(function (el) {
+	              return _react2.default.createElement(
+	                'li',
+	                null,
+	                _runeInfo2.default[el.runeId].name
+	              );
+	            })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return RunePage;
+	})(_react2.default.Component);
+
+	exports.default = RunePage;
+
+/***/ },
+/* 165 */
 /***/ function(module, exports) {
 
 	"use strict";
