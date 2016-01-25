@@ -4,6 +4,7 @@ var request = require('superagent');
 var axios = require('axios');
 var Q = require('q');
 var fs = require('fs');
+var util = require('util');
 
 app.use(express.static('public'));
 
@@ -25,9 +26,8 @@ function getRunes(id) {
               });
 }
 
-//get rune data
-app.get('/runes', function(req, res) {
-    axios.
+var getRawRuneInfo = function(req, res){
+ axios.
         get('https://global.api.pvp.net/api/lol/static-data/na/v1.2/rune?api_key=df0f2c4b-4e06-40c4-86c8-1731f1dd2d60')
         .then(function(res){
             var data = JSON.stringify(res.data.data, null, 2);
@@ -35,13 +35,15 @@ app.get('/runes', function(req, res) {
                 if (err) throw err;
             });
         })
-});
 
-app.get('/api/:username', function (req, res) {
+};
+
+//get rune data
+app.get('/runes', getRawRuneInfo);
+
+var getRuneData = function(req, res){
     var username = req.params.username;
     var summonerEndpoint = getSummonerRoute(username);
-
-    console.log('getting', req.params.username);
 
     axios.get(summonerEndpoint)
           .then(function(res){
@@ -58,13 +60,18 @@ app.get('/api/:username', function (req, res) {
             return getRunes(res.id);
           })
           .then(function(result){
+console.log(util.inspect(result.data, false, null));
+
             res.send(result.data)
           })
           .catch(function(res){
             console.log('errored');
             console.error('res', res)
           });
-});
+
+};
+
+app.get('/api/:username', getRuneData);
 
 app.set('port', (process.env.PORT || 5000));
 
