@@ -4,7 +4,7 @@
   "description": "Runes",
   "scripts": {
     "start": "node server.js",
-    "test": "node test/test.js"
+    "test": "nodemon test/test.js | tap-bail | faucet"
   },
   "devDependencies": {
     "babel-core": "^6.3.13",
